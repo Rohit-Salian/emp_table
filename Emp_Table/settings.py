@@ -23,10 +23,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-#wy7^^!x9pq$1m7m=$b)pqh($kc89=03(pxjaw1q9d4uoug42-'
+# SECRET_KEY = 'django-insecure-#wy7^^!x9pq$1m7m=$b)pqh($kc89=03(pxjaw1q9d4uoug42-' -dev
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-#wy7^^!x9pq$1m7m=$b)pqh($kc89=03(pxjaw1q9d4uoug42-')
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+# DEBUG = True -dev
+DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
 #ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '10.243.36.39', '192.168.0.104',]
 ALLOWED_HOSTS = ['*',]
@@ -47,6 +50,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -129,3 +133,7 @@ STATIC_ROOT= os.path.join(BASE_DIR,'static')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Heroku: Update database configuration from $DATABASE_URL.
+import dj_database_url
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
