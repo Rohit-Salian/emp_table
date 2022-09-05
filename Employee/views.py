@@ -40,8 +40,6 @@ class EmployeeViews(APIView): #here we use apiview class to represent views.
         
         
         elif 'age' in parameter_dict.keys():#filter for search by 'age'
-           
-            
             filtering_data = parameter_dict['age']
             all_Employee_obj = Employee.objects.filter(Age=filtering_data)
             serializer = EmployeeSerializer(all_Employee_obj, many=True)
@@ -67,9 +65,7 @@ class EmployeeViews(APIView): #here we use apiview class to represent views.
         items = Employee.objects.all()       
         serializer = EmployeeSerializer(items, many=True)
         return Response( serializer.data)
-    
-    
-   
+
      #put request handler
     def put(self, request, id=None):  
         '''this function is used to modify resorce and update data according to id. 
@@ -111,11 +107,3 @@ class EmployeeViews(APIView): #here we use apiview class to represent views.
         item = get_object_or_404(Employee, id=id)
         item.delete()
         return Response("Item Deleted")
-    
-   
-        
-        
-    
-    
-    
-        
